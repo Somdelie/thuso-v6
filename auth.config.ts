@@ -7,9 +7,6 @@ import { getAccountByUserId } from "./data/accounts";
 // import Github from "next-auth/providers/github";
 // import Google from "next-auth/providers/google";
 
-
-
-
 // Define or import the User type
 type User = {
   id: string;
@@ -56,7 +53,7 @@ export default {
   ],
   callbacks: {
     authorized({ request, auth }) {
-      const user = (auth?.user as User);
+      const user = auth?.user as User;
       const isOnAdmin = request.nextUrl.pathname.startsWith("/admin");
       const isOnAuthRoute = request.nextUrl.pathname.startsWith("/auth");
 
@@ -67,11 +64,7 @@ export default {
       }
 
       // Redirect to 404 page if not an admin
-      if (
-        isOnAdmin &&
-        user &&
-        (user.isAdmin === false)
-      ) {
+      if (isOnAdmin && user && user.isAdmin === false) {
         return Response.redirect(`${baseUrl}/not-found`);
       }
 
@@ -79,19 +72,19 @@ export default {
         return Response.redirect(`${baseUrl}/`);
       }
     },
-   async signIn({ user, account }): Promise<boolean> {
-  // Callback executed after successful sign-in
-  // Allow without email verification for non-credentials provider
-  if (!user || account?.provider !== "credentials") return true;
+    async signIn({ user, account }): Promise<boolean> {
+      // Callback executed after successful sign-in
+      // Allow without email verification for non-credentials provider
+      if (!user || account?.provider !== "credentials") return true;
 
-  const existingUser = await getUserById((user as User).id);
+      const existingUser = await getUserById((user as User).id);
 
-  // Prevent sign-in without email verification
-  // if (!existingUser?.emailVerified) return false;
+      // Prevent sign-in without email verification
+      // if (!existingUser?.emailVerified) return false;
 
-  // Add a default return statement
-  return true;
-},
+      // Add a default return statement
+      return true;
+    },
     async jwt({ token }): Promise<Record<string, unknown>> {
       // console.log("AM being called");
       if (!token.sub) return token;
@@ -111,7 +104,6 @@ export default {
       token.phone = existingUser?.phone;
       token.status = existingUser.status;
       token.address = existingUser.address;
-      token.userType = existingUser.userType;
       token.isAdmin = existingUser.isAdmin;
       // token.job = existingUser.
       token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
@@ -125,24 +117,24 @@ export default {
       }
 
       if (token.role && session.user) {
-        session.user.role = token.role ;
+        session.user.role = token.role;
       }
 
-    //   if (token.userType && session.user) {
-    //     session.user.userType = token.userType as UserType;
-    //   }
+      //   if (token.userType && session.user) {
+      //     session.user.userType = token.userType as UserType;
+      //   }
 
       if (token.status && session.user) {
         session.user.status = token.status as string;
       }
 
       if (token.isAdmin && session.user) {
-        session.user.isAdmin = token.isAdmin
+        session.user.isAdmin = token.isAdmin;
       }
 
-    //   if (token.about && session.user) {
-    //     session.user.about = token.about as string;
-    //   }
+      //   if (token.about && session.user) {
+      //     session.user.about = token.about as string;
+      //   }
 
       if (session.user) {
         session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
@@ -150,14 +142,14 @@ export default {
 
       if (session.user) {
         session.user.name = token.name;
-        session.user.phone = token.phone
+        session.user.phone = token.phone;
         session.user.about = token.about as any;
         session.user.jobType = token.jobType as any;
         session.user.isOAuth = token.isOAuth as boolean;
         session.user.address = token.address as any;
-        session.user.status = token.status
-        session.user.isAdmin = token.isAdmin
-        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled
+        session.user.status = token.status;
+        session.user.isAdmin = token.isAdmin;
+        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled;
         // session.user.userType = token.userType as UserType;
       }
 
