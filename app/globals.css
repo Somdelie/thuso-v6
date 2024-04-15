@@ -66,11 +66,17 @@
   }
 }
 
+.card{
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
 @layer base {
   * {
     @apply border-border;
   }
   body {
+    scroll-behavior: smooth;
+    scrollbar-width: 1px;
     @apply bg-background text-foreground;
   }
 }
