@@ -32,6 +32,7 @@ const UserForm = () => {
       name: "",
       role: "USER",
       phone: "",
+      address: "",
     },
   });
 

@@ -12,12 +12,6 @@ export const LoginSchema = z.object({
   code: z.optional(z.string()), // Optional field for two-factor authentication code
 });
 
-export const EditUserSchema = z.object({
-  isAproved: z.boolean(),
-  role: z.enum(["ADMIN", "USER", "EDITOR"]).optional(),
-  status: z.enum(["ACTIVE", "BLOCKED"]).optional(),
-  userType: z.enum(["NORMAL", "FREELANCER"]).optional(),
-});
 // Settings Schema for Updating user info
 export const SettingsSchema = z
   .object({
@@ -87,23 +81,11 @@ export const RegisterSchema = z.object({
     .max(50, {
       message: "Name must be less than 50 characters",
     }),
-  description: z
-    .string()
-    .min(10, {
-      message: "Description must be at least 10 characters.",
-    })
-    .max(1000, {
-      message: "Description must be 1000 characters or less",
-    }),
-  jobType: z.string().optional(),
-  documentPhoto: z.string().optional(),
   address: z.string().optional(),
   role: z.enum(["USER", "FREELANCER"]),
-  phone: z.optional(
-    z.string().refine(validator.isMobilePhone, {
-      message: "Invalid phone number",
-    })
-  ),
+  phone: z.string().refine(validator.isMobilePhone, {
+    message: "Invalid phone number",
+  }),
 });
 
 // Register Schema for validating user registration input
@@ -122,9 +104,12 @@ export const FreelancerSchema = z.object({
     .max(50, {
       message: "Name must be less than 50 characters",
     }),
-  image: z.string().min(3, {
-    message: "Profile picture is missing!",
-  }),
+  image: z
+    .string()
+    .min(3, {
+      message: "Profile picture is missing!",
+    })
+    .optional(),
   about: z
     .string()
     .min(10, {
